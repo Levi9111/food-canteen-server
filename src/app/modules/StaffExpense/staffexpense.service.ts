@@ -3,9 +3,9 @@ import { isValidObjectId } from 'mongoose';
 import AppError from '../../errors/AppError';
 import { parseDateParts } from '../../utils/dhakaDate';
 import { toPaisa, toTaka } from '../../utils/money';
-import { PStaffModel } from '../PStaff/pStaff.model';
-import { TStaffExpenseInput } from './staffExpense.interface';
-import { StaffExpenseModel } from './staffExpense.model';
+import { PStaffModel } from '../PStaff/pstaff.model';
+import { TStaffExpenseInput } from './staffexpense.interface';
+import { StaffExpenseModel } from './staffexpense.model';
 
 const resolveStaffId = async (input: string): Promise<string> => {
   if (isValidObjectId(input)) {

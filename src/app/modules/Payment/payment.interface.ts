@@ -5,7 +5,7 @@ import {
   TSquadron,
   TRoom,
 } from '../../constants/canteen.constants';
-import { IPStaff } from '../PStaff/pStaff.interface';
+import { IPStaff } from '../PStaff/pstaff.interface';
 
 export interface IPayment {
   _id?: string;

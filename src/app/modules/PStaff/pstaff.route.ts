@@ -1,8 +1,8 @@
 import express from 'express';
 import auth from '../../middlewares/auth.middleware';
 import validateRequest from '../../utils/validateRequest';
-import { PStaffControllers } from './pStaff.controller';
-import { PStaffValidation } from './pStaff.validation';
+import { PStaffControllers } from './pstaff.controller';
+import { PStaffValidation } from './pstaff.validation';
 
 const router = express.Router();
 

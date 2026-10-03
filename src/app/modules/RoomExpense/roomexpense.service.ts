@@ -2,8 +2,8 @@ import { StatusCodes } from 'http-status-codes';
 import AppError from '../../errors/AppError';
 import { parseDateParts } from '../../utils/dhakaDate';
 import { toPaisa, toTaka } from '../../utils/money';
-import { TRoomExpenseInput } from './roomExpense.interface';
-import { RoomExpenseModel } from './roomExpense.model';
+import { TRoomExpenseInput } from './roomexpense.interface';
+import { RoomExpenseModel } from './roomexpense.model';
 
 const upsertRoomExpense = async (
   payload: TRoomExpenseInput,

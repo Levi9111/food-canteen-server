@@ -1,8 +1,8 @@
 import express from 'express';
 import auth from '../../middlewares/auth.middleware';
 import validateRequest from '../../utils/validateRequest';
-import { RoomExpenseControllers } from './roomExpense.controller';
-import { RoomExpenseValidation } from './roomExpense.validation';
+import { RoomExpenseControllers } from './roomexpense.controller';
+import { RoomExpenseValidation } from './roomexpense.validation';
 
 const router = express.Router();
 

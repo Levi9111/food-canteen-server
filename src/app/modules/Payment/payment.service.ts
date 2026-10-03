@@ -3,7 +3,7 @@ import { isValidObjectId } from 'mongoose';
 import AppError from '../../errors/AppError';
 import { getDhakaDateString } from '../../utils/dhakaDate';
 import { toPaisa, toTaka } from '../../utils/money';
-import { PStaffModel } from '../PStaff/pStaff.model';
+import { PStaffModel } from '../PStaff/pstaff.model';
 import { TPaymentInput } from './payment.interface';
 import { PaymentModel } from './payment.model';
 

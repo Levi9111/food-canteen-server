@@ -1,8 +1,8 @@
 import express from 'express';
 import auth from '../../middlewares/auth.middleware';
 import validateRequest from '../../utils/validateRequest';
-import { StaffExpenseControllers } from './staffExpense.controller';
-import { StaffExpenseValidation } from './staffExpense.validation';
+import { StaffExpenseControllers } from './staffexpense.controller';
+import { StaffExpenseValidation } from './staffexpense.validation';
 
 const router = express.Router();
 

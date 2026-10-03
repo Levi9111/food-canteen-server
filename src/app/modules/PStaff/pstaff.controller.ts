@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { catchAsync } from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
-import { PStaffService } from './pStaff.service';
+import { PStaffService } from './pstaff.service';
 
 const createPStaff = catchAsync(async (req: Request, res: Response) => {
   const result = await PStaffService.createPStaff(req.body);

@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { Schema, model } from 'mongoose';
 import { CANTEEN_CONSTANTS } from '../../constants/canteen.constants';
-import { IPStaff } from './pStaff.interface';
+import { IPStaff } from './pstaff.interface';
 
 const pStaffSchema = new Schema<IPStaff>(
   {

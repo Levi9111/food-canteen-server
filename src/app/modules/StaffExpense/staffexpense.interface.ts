@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { IPStaff } from '../PStaff/pStaff.interface';
+import { IPStaff } from '../PStaff/pstaff.interface';
 
 export interface IStaffExpense {
   _id?: string;

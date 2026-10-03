@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { IStaffExpense } from './staffExpense.interface';
+import { IStaffExpense } from './staffexpense.interface';
 
 const staffExpenseSchema = new Schema<IStaffExpense>(
   {

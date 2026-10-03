@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { catchAsync } from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
-import { RoomExpenseService } from './roomExpense.service';
+import { RoomExpenseService } from './roomexpense.service';
 
 const upsertRoomExpense = catchAsync(async (req: Request, res: Response) => {
   const result = await RoomExpenseService.upsertRoomExpense(

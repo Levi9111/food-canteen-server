@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { CANTEEN_CONSTANTS } from '../../constants/canteen.constants';
-import { IRoomExpense } from './roomExpense.interface';
+import { IRoomExpense } from './roomexpense.interface';
 
 const roomExpenseSchema = new Schema<IRoomExpense>(
   {

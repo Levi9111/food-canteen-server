@@ -3,8 +3,8 @@ import { isValidObjectId } from 'mongoose';
 import AppError from '../../errors/AppError';
 import { toPaisa, toTaka } from '../../utils/money';
 import { OfficeModel } from '../Office/office.model';
-import { TPStaffInput } from './pStaff.interface';
-import { PStaffModel } from './pStaff.model';
+import { TPStaffInput } from './pstaff.interface';
+import { PStaffModel } from './pstaff.model';
 
 const resolveOfficeId = async (officeInput: string): Promise<string> => {
   if (isValidObjectId(officeInput)) {
