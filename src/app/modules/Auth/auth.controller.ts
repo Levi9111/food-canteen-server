@@ -15,8 +15,6 @@ const login = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-
-
 const getProfile = catchAsync(async (req: Request, res: Response) => {
   const { userId, role } = req.user;
   sendResponse(res, {

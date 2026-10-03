@@ -38,7 +38,6 @@ router.post(
   AuthControllers.login,
 );
 
-
 /**
  * @openapi
  * /auth/profile:
