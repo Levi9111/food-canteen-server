@@ -6,52 +6,40 @@ import { AuthValidation } from './auth.validation';
 
 const router = express.Router();
 
-/**
- * @openapi
- * /auth/login:
- *   post:
- *     tags: [Auth]
- *     summary: Authenticate user & receive JWT token(s)
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required: [email, password]
- *             properties:
- *               email:
- *                 type: string
- *                 example: admin@test.com
- *               password:
- *                 type: string
- *                 example: SecurePassword123
- *     responses:
- *       200:
- *         description: User logged in successfully
- *       401:
- *         description: Invalid credentials
- */
 router.post(
   '/login',
   validateRequest(AuthValidation.loginSchema),
   AuthControllers.login,
 );
 
-/**
- * @openapi
- * /auth/profile:
- *   get:
- *     tags: [Auth]
- *     summary: Get authenticated user profile
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: User profile fetched successfully
- *       401:
- *         description: Unauthorized
- */
-router.get('/profile', auth('ADMIN', 'USER'), AuthControllers.getProfile);
+router.post(
+  '/refresh',
+  validateRequest(AuthValidation.refreshTokenSchema),
+  AuthControllers.refreshToken,
+);
+
+router.get(
+  '/profile',
+  auth('ADMIN', 'NCOIC', 'JCOIC', 'WOIC'),
+  AuthControllers.getProfile,
+);
+
+router.patch(
+  '/change-password',
+  auth('ADMIN', 'NCOIC', 'JCOIC', 'WOIC'),
+  validateRequest(AuthValidation.changePasswordSchema),
+  AuthControllers.changePassword,
+);
+
+router.post(
+  '/users',
+  auth('ADMIN'),
+  validateRequest(AuthValidation.registerUserSchema),
+  AuthControllers.registerUser,
+);
+
+router.get('/users', auth('ADMIN'), AuthControllers.getAllUsers);
+
+router.patch('/users/:id', auth('ADMIN'), AuthControllers.updateUser);
 
 export const AuthRoutes = router;

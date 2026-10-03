@@ -1,16 +1,25 @@
+import { TManagerRole, TBafRank } from '../../constants/canteen.constants';
+
 export type TLoginUser = {
-  email: string;
+  loginId: string; // Accepts username, bdNo, or email
   password: string;
 };
 
-export type TUserRole = 'ADMIN' | 'USER';
+export type TChangePassword = {
+  oldPassword: string;
+  newPassword: string;
+};
 
 export type TLoginResponse = {
   accessToken: string;
   refreshToken: string;
   user: {
     userId: string;
-    email: string;
-    role: TUserRole;
+    username: string;
+    name: string;
+    rank: TBafRank;
+    bdNo: string;
+    email?: string;
+    role: TManagerRole;
   };
 };

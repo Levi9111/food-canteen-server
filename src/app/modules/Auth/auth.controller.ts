@@ -15,14 +15,72 @@ const login = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const refreshToken = catchAsync(async (req: Request, res: Response) => {
+  const result = await AuthService.refreshToken(req.body.refreshToken);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Access token refreshed successfully',
+    data: result,
+  });
+});
+
+const changePassword = catchAsync(async (req: Request, res: Response) => {
+  const result = await AuthService.changePassword(req.user.userId, req.body);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: result.message,
+    data: null,
+  });
+});
+
 const getProfile = catchAsync(async (req: Request, res: Response) => {
-  const { userId, role } = req.user;
+  const user = await AuthService.getProfile(req.user.userId);
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
     message: 'Profile fetched successfully',
-    data: { id: userId, role },
+    data: user,
   });
 });
 
-export const AuthControllers = { login, getProfile };
+const registerUser = catchAsync(async (req: Request, res: Response) => {
+  const user = await AuthService.registerUser(req.body);
+  sendResponse(res, {
+    statusCode: StatusCodes.CREATED,
+    success: true,
+    message: 'Manager user enrolled successfully',
+    data: user,
+  });
+});
+
+const getAllUsers = catchAsync(async (_req: Request, res: Response) => {
+  const users = await AuthService.getAllUsers();
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Users retrieved successfully',
+    data: users,
+  });
+});
+
+const updateUser = catchAsync(async (req: Request, res: Response) => {
+  const user = await AuthService.updateUser(req.params.id as string, req.body);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'User updated successfully',
+    data: user,
+  });
+});
+
+export const AuthControllers = {
+  login,
+  refreshToken,
+  changePassword,
+  getProfile,
+  registerUser,
+  getAllUsers,
+  updateUser,
+};

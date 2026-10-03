@@ -1,12 +1,23 @@
 import { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
-import { TUserRole } from './auth.interface';
+import {
+  CANTEEN_CONSTANTS,
+  TManagerRole,
+  TBafRank,
+} from '../../constants/canteen.constants';
+import config from '../../config';
 
 export interface IUser {
   _id?: string;
-  email: string;
+  username: string;
+  name: string;
+  rank: TBafRank;
+  bdNo: string;
+  email?: string;
   password: string;
-  role: TUserRole;
+  role: TManagerRole;
+  phone?: string;
+  isActive: boolean;
   createdAt?: Date;
   updatedAt?: Date;
   comparePassword(plainPassword: string): Promise<boolean>;
@@ -14,13 +25,35 @@ export interface IUser {
 
 const userSchema = new Schema<IUser>(
   {
-    email: {
+    username: {
       type: String,
       required: true,
       unique: true,
       lowercase: true,
       trim: true,
-      match: [/^\S+@\S+\.\S+$/, 'Please provide a valid email'],
+    },
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    rank: {
+      type: String,
+      enum: CANTEEN_CONSTANTS.ranks,
+      required: true,
+      default: 'Sgt',
+    },
+    bdNo: {
+      type: String,
+      required: true,
+      unique: true,
+      uppercase: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      lowercase: true,
+      trim: true,
     },
     password: {
       type: String,
@@ -30,8 +63,17 @@ const userSchema = new Schema<IUser>(
     },
     role: {
       type: String,
-      enum: ['ADMIN', 'USER'],
-      default: 'USER',
+      enum: CANTEEN_CONSTANTS.roles,
+      required: true,
+      default: 'NCOIC',
+    },
+    phone: {
+      type: String,
+      trim: true,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
     },
   },
   { timestamps: true },
@@ -41,7 +83,7 @@ userSchema.pre('save', async function () {
   if (!this.isModified('password')) {
     return;
   }
-  this.password = await bcrypt.hash(this.password, 10);
+  this.password = await bcrypt.hash(this.password, config.bcrypt_salt_rounds);
 });
 
 userSchema.methods.comparePassword = async function (
