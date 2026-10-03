@@ -2,10 +2,13 @@ import { Router } from 'express';
 import { AuthRoutes } from '../modules/Auth/auth.route';
 import { OfficeRoutes } from '../modules/Office/office.route';
 import { EntryRoutes } from '../modules/Entry/entry.route';
-import { RoomExpenseRoutes } from '../modules/RoomExpense/roomExpense.route';
-import { PStaffRoutes } from '../modules/PStaff/pStaff.route';
-import { StaffExpenseRoutes } from '../modules/StaffExpense/staffExpense.route';
+import { RoomExpenseRoutes } from '../modules/RoomExpense/roomexpense.route';
+import { PStaffRoutes } from '../modules/PStaff/pstaff.route';
+import { StaffExpenseRoutes } from '../modules/StaffExpense/staffexpense.route';
 import { PaymentRoutes } from '../modules/Payment/payment.route';
+import { ReportRoutes } from '../modules/Report/report.route';
+import { ClosingRoutes } from '../modules/Closing/closing.route';
+import { MetaRoutes } from '../modules/Meta/meta.route';
 // --- INJECT IMPORTS HERE ---
 
 const router = Router();
@@ -18,6 +21,9 @@ const moduleRoutes: { path: string; route: Router }[] = [
   { path: '/pstaffs', route: PStaffRoutes },
   { path: '/staff-expenses', route: StaffExpenseRoutes },
   { path: '/payments', route: PaymentRoutes },
+  { path: '/reports', route: ReportRoutes },
+  { path: '/closings', route: ClosingRoutes },
+  { path: '/meta', route: MetaRoutes },
   // --- INJECT ROUTES HERE ---
 ];
 
