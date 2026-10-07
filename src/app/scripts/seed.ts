@@ -5,6 +5,7 @@ import { CANTEEN_CONSTANTS } from '../constants/canteen.constants';
 import { UserModel } from '../modules/Auth/auth.model';
 import { EntryModel } from '../modules/Entry/entry.model';
 import { OfficeModel } from '../modules/Office/office.model';
+import { SquadronModel } from '../modules/Squadron/squadron.model';
 
 const seedDatabase = async () => {
   try {
@@ -39,6 +40,24 @@ const seedDatabase = async () => {
       { upsert: true, new: true },
     );
     console.log('Default Entry batch seeded.');
+
+    // 2.5 Seed Squadrons and Rooms
+    console.log('Seeding BAF RTS squadrons and room numbers...');
+    const defaultRooms = Array.from({ length: 16 }, (_, i) => `Room ${i + 1}`);
+    for (const sqn of CANTEEN_CONSTANTS.squadrons) {
+      await SquadronModel.findOneAndUpdate(
+        { name: sqn },
+        {
+          $setOnInsert: {
+            name: sqn,
+            rooms: defaultRooms,
+            isActive: true,
+          },
+        },
+        { upsert: true, new: true },
+      );
+    }
+    console.log('Squadrons and rooms seeded successfully.');
 
     // 3. Seed Default Admin, NCOIC, and JCOIC users
     console.log('Seeding default manager users...');
