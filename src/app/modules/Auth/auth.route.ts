@@ -33,13 +33,19 @@ router.patch(
 
 router.post(
   '/users',
-  auth('ADMIN'),
+  auth('ADMIN', 'NCOIC', 'JCOIC'),
   validateRequest(AuthValidation.registerUserSchema),
   AuthControllers.registerUser,
 );
 
-router.get('/users', auth('ADMIN'), AuthControllers.getAllUsers);
+router.get('/users', auth('ADMIN', 'NCOIC', 'JCOIC'), AuthControllers.getAllUsers);
 
 router.patch('/users/:id', auth('ADMIN'), AuthControllers.updateUser);
+
+router.delete(
+  '/users/:id',
+  auth('ADMIN', 'NCOIC', 'JCOIC'),
+  AuthControllers.deleteUser,
+);
 
 export const AuthRoutes = router;

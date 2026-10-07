@@ -75,6 +75,19 @@ const updateUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const deleteUser = catchAsync(async (req: Request, res: Response) => {
+  const result = await AuthService.deleteUser(
+    req.params.id as string,
+    req.user,
+  );
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: result.message,
+    data: null,
+  });
+});
+
 export const AuthControllers = {
   login,
   refreshToken,
@@ -83,4 +96,5 @@ export const AuthControllers = {
   registerUser,
   getAllUsers,
   updateUser,
+  deleteUser,
 };

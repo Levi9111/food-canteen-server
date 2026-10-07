@@ -31,7 +31,7 @@ const registerUserSchema = z.object({
     bdNo: z.string().min(3, 'BD Number is required'),
     email: z.string().email('Invalid email address').optional(),
     password: z.string().min(6, 'Password must be at least 6 characters'),
-    role: z.enum(CANTEEN_CONSTANTS.roles).default('NCOIC'),
+    role: z.enum(['NCOIC', 'JCOIC']),
     phone: z.string().optional(),
   }),
 });

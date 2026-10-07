@@ -120,6 +120,45 @@ const getProfile = async (userId: string) => {
 };
 
 const registerUser = async (payload: Partial<IUser>) => {
+  // 1. Role must strictly be NCOIC or JCOIC
+  if (payload.role !== 'NCOIC' && payload.role !== 'JCOIC') {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      'A new user can only be assigned NCOIC or JCOIC role.',
+    );
+  }
+
+  // 2. Check current occupancy of NCOIC and JCOIC
+  const ncoicCount = await UserModel.countDocuments({
+    role: 'NCOIC',
+    isActive: true,
+  });
+  const jcoicCount = await UserModel.countDocuments({
+    role: 'JCOIC',
+    isActive: true,
+  });
+
+  if (ncoicCount > 0 && jcoicCount > 0) {
+    throw new AppError(
+      StatusCodes.CONFLICT,
+      'Both NCOIC and JCOIC positions are already occupied. No new user allowed.',
+    );
+  }
+
+  if (payload.role === 'NCOIC' && ncoicCount > 0) {
+    throw new AppError(
+      StatusCodes.CONFLICT,
+      'An active NCOIC already exists. Only one NCOIC is allowed.',
+    );
+  }
+
+  if (payload.role === 'JCOIC' && jcoicCount > 0) {
+    throw new AppError(
+      StatusCodes.CONFLICT,
+      'An active JCOIC already exists. Only one JCOIC is allowed.',
+    );
+  }
+
   const existing = await UserModel.findOne({
     $or: [
       { username: payload.username?.toLowerCase() },
@@ -153,6 +192,51 @@ const updateUser = async (id: string, payload: Partial<IUser>) => {
   return user;
 };
 
+const deleteUser = async (
+  targetId: string,
+  requestingUser: { userId: string; role: string },
+) => {
+  const targetUser = await UserModel.findById(targetId);
+  if (!targetUser) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Target operator user not found');
+  }
+
+  // Prevent self removal
+  if (targetUser._id.toString() === requestingUser.userId) {
+    throw new AppError(
+      StatusCodes.FORBIDDEN,
+      'Self-removal is not permitted. An operator cannot remove their own account.',
+    );
+  }
+
+  // NCOIC can only remove JCOIC, JCOIC can only remove NCOIC
+  if (requestingUser.role === 'NCOIC') {
+    if (targetUser.role !== 'JCOIC') {
+      throw new AppError(
+        StatusCodes.FORBIDDEN,
+        'NCOIC is only authorized to remove a JCOIC account.',
+      );
+    }
+  } else if (requestingUser.role === 'JCOIC') {
+    if (targetUser.role !== 'NCOIC') {
+      throw new AppError(
+        StatusCodes.FORBIDDEN,
+        'JCOIC is only authorized to remove an NCOIC account.',
+      );
+    }
+  } else if (requestingUser.role !== 'ADMIN') {
+    throw new AppError(
+      StatusCodes.FORBIDDEN,
+      'You are not authorized to remove operators.',
+    );
+  }
+
+  await UserModel.findByIdAndDelete(targetId);
+  return {
+    message: `${targetUser.role} (${targetUser.name}) removed successfully`,
+  };
+};
+
 export const AuthService = {
   loginUser,
   refreshToken,
@@ -161,4 +245,5 @@ export const AuthService = {
   registerUser,
   getAllUsers,
   updateUser,
+  deleteUser,
 };
