@@ -34,7 +34,9 @@ const updateEntry = async (id: string, payload: Partial<IEntry>) => {
 };
 
 const getActiveEntry = async () => {
-  let activeEntry = await EntryModel.findOne({ status: 'ACTIVE' }).sort({ createdAt: -1 });
+  let activeEntry = await EntryModel.findOne({ status: 'ACTIVE' }).sort({
+    createdAt: -1,
+  });
   if (!activeEntry) {
     activeEntry = await EntryModel.findOne().sort({ createdAt: -1 });
     if (!activeEntry) {

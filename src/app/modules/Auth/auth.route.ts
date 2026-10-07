@@ -38,7 +38,11 @@ router.post(
   AuthControllers.registerUser,
 );
 
-router.get('/users', auth('ADMIN', 'NCOIC', 'JCOIC'), AuthControllers.getAllUsers);
+router.get(
+  '/users',
+  auth('ADMIN', 'NCOIC', 'JCOIC'),
+  AuthControllers.getAllUsers,
+);
 
 router.patch('/users/:id', auth('ADMIN'), AuthControllers.updateUser);
 
