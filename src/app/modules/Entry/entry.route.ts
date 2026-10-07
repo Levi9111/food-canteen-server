@@ -8,6 +8,8 @@ const router = express.Router();
 
 router.get('/', EntryControllers.getAllEntries);
 
+router.get('/active', EntryControllers.getActiveEntry);
+
 router.get('/:id', EntryControllers.getEntryById);
 
 router.post(
@@ -15,6 +17,12 @@ router.post(
   auth('ADMIN', 'NCOIC', 'JCOIC', 'WOIC'),
   validateRequest(EntryValidation.createEntrySchema),
   EntryControllers.createEntry,
+);
+
+router.patch(
+  '/:id/activate',
+  auth('ADMIN', 'NCOIC', 'JCOIC', 'WOIC'),
+  EntryControllers.activateEntry,
 );
 
 router.patch(

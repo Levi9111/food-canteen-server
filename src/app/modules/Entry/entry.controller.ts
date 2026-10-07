@@ -51,9 +51,31 @@ const updateEntry = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getActiveEntry = catchAsync(async (req: Request, res: Response) => {
+  const result = await EntryService.getActiveEntry();
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Active entry retrieved successfully',
+    data: result,
+  });
+});
+
+const activateEntry = catchAsync(async (req: Request, res: Response) => {
+  const result = await EntryService.activateEntry(req.params.id as string);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Entry activated successfully',
+    data: result,
+  });
+});
+
 export const EntryControllers = {
   getAllEntries,
+  getActiveEntry,
   getEntryById,
   createEntry,
   updateEntry,
+  activateEntry,
 };

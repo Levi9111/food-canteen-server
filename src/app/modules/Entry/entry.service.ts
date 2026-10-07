@@ -33,9 +33,38 @@ const updateEntry = async (id: string, payload: Partial<IEntry>) => {
   return entry;
 };
 
+const getActiveEntry = async () => {
+  let activeEntry = await EntryModel.findOne({ status: 'ACTIVE' }).sort({ createdAt: -1 });
+  if (!activeEntry) {
+    activeEntry = await EntryModel.findOne().sort({ createdAt: -1 });
+    if (!activeEntry) {
+      activeEntry = await EntryModel.create({
+        entryNo: '54',
+        status: 'ACTIVE',
+      });
+    } else {
+      activeEntry.status = 'ACTIVE';
+      await activeEntry.save();
+    }
+  }
+  return activeEntry;
+};
+
+const activateEntry = async (id: string) => {
+  const entry = await EntryModel.findById(id);
+  if (!entry) throw new AppError(StatusCodes.NOT_FOUND, 'Entry not found');
+
+  await EntryModel.updateMany({ _id: { $ne: id } }, { status: 'PASSED_OUT' });
+  entry.status = 'ACTIVE';
+  await entry.save();
+  return entry;
+};
+
 export const EntryService = {
   getAllEntries,
+  getActiveEntry,
   getEntryById,
   createEntry,
   updateEntry,
+  activateEntry,
 };
