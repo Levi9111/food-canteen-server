@@ -10,9 +10,17 @@ const loginUser = async (payload: TLoginUser) => {
   const queryId = payload.loginId.trim();
   const lowerId = queryId.toLowerCase();
   const upperId = queryId.toUpperCase();
+  const cleanDigits = upperId.replace(/^BD\/?/, '');
+  const withBdPrefix = `BD/${cleanDigits}`;
 
   const user = await UserModel.findOne({
-    $or: [{ username: lowerId }, { bdNo: upperId }, { email: lowerId }],
+    $or: [
+      { username: lowerId },
+      { bdNo: upperId },
+      { bdNo: cleanDigits },
+      { bdNo: withBdPrefix },
+      { email: lowerId },
+    ],
   }).select('+password');
 
   if (!user) {
@@ -59,6 +67,7 @@ const loginUser = async (payload: TLoginUser) => {
       name: user.name,
       rank: user.rank,
       bdNo: user.bdNo,
+      trade: user.trade,
       email: user.email,
       role: user.role,
     },
