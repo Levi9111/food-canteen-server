@@ -19,6 +19,7 @@ export type TLoginResponse = {
     name: string;
     rank: TBafRank;
     bdNo: string;
+    trade?: string;
     email?: string;
     role: TManagerRole;
   };

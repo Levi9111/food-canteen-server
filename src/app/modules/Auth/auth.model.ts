@@ -17,6 +17,7 @@ export interface IUser {
   password: string;
   role: TManagerRole;
   phone?: string;
+  trade?: string;
   isActive: boolean;
   createdAt?: Date;
   updatedAt?: Date;
@@ -48,6 +49,10 @@ const userSchema = new Schema<IUser>(
       required: true,
       unique: true,
       uppercase: true,
+      trim: true,
+    },
+    trade: {
+      type: String,
       trim: true,
     },
     email: {
