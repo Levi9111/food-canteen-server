@@ -15,11 +15,11 @@ const paymentSchema = new Schema<IPayment>(
     },
     squadron: {
       type: String,
-      enum: CANTEEN_CONSTANTS.squadrons,
+      trim: true,
     },
     room: {
       type: String,
-      enum: CANTEEN_CONSTANTS.rooms,
+      trim: true,
     },
     pstaff: {
       type: Schema.Types.ObjectId,

@@ -1,11 +1,10 @@
 import { z } from 'zod';
-import { CANTEEN_CONSTANTS } from '../../constants/canteen.constants';
 
 const upsertRoomExpenseSchema = z.object({
   body: z.object({
     entry: z.string().min(1, 'Entry is required'),
-    squadron: z.enum(CANTEEN_CONSTANTS.squadrons),
-    room: z.enum(CANTEEN_CONSTANTS.rooms),
+    squadron: z.string({ required_error: 'Squadron is required' }).min(1),
+    room: z.string({ required_error: 'Room is required' }).min(1),
     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be YYYY-MM-DD'),
     amount: z.number().min(0, 'Amount must be non-negative'),
     representativeName: z.string().optional(),
@@ -22,8 +21,8 @@ const bulkUpsertRoomExpenseSchema = z.object({
 const queryRoomExpenseSchema = z.object({
   query: z.object({
     entry: z.string().optional(),
-    squadron: z.enum(CANTEEN_CONSTANTS.squadrons).optional(),
-    room: z.enum(CANTEEN_CONSTANTS.rooms).optional(),
+    squadron: z.string().optional(),
+    room: z.string().optional(),
     date: z
       .string()
       .regex(/^\d{4}-\d{2}-\d{2}$/)

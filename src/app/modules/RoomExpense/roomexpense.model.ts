@@ -1,5 +1,4 @@
 import { Schema, model } from 'mongoose';
-import { CANTEEN_CONSTANTS } from '../../constants/canteen.constants';
 import { IRoomExpense } from './roomexpense.interface';
 
 const roomExpenseSchema = new Schema<IRoomExpense>(
@@ -11,13 +10,13 @@ const roomExpenseSchema = new Schema<IRoomExpense>(
     },
     squadron: {
       type: String,
-      enum: CANTEEN_CONSTANTS.squadrons,
       required: true,
+      trim: true,
     },
     room: {
       type: String,
-      enum: CANTEEN_CONSTANTS.rooms,
       required: true,
+      trim: true,
     },
     date: {
       type: String,

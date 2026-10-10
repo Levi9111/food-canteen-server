@@ -61,8 +61,8 @@ export const CANTEEN_CONSTANTS = {
   ] as const,
 };
 
-export type TSquadron = (typeof CANTEEN_CONSTANTS.squadrons)[number];
-export type TRoom = (typeof CANTEEN_CONSTANTS.rooms)[number];
+export type TSquadron = (typeof CANTEEN_CONSTANTS.squadrons)[number] | string;
+export type TRoom = (typeof CANTEEN_CONSTANTS.rooms)[number] | string;
 export type TManagerRole = (typeof CANTEEN_CONSTANTS.roles)[number];
 export type TBafRank = (typeof CANTEEN_CONSTANTS.ranks)[number];
 export type TCustomerType = (typeof CANTEEN_CONSTANTS.customerTypes)[number];

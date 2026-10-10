@@ -6,8 +6,8 @@ const createPaymentSchema = z
     body: z.object({
       customerType: z.enum(CANTEEN_CONSTANTS.customerTypes),
       entry: z.string().optional(),
-      squadron: z.enum(CANTEEN_CONSTANTS.squadrons).optional(),
-      room: z.enum(CANTEEN_CONSTANTS.rooms).optional(),
+      squadron: z.string().optional(),
+      room: z.string().optional(),
       pstaff: z.string().optional(),
       year: z.number().int().min(2020),
       month: z.number().int().min(1).max(12),
@@ -44,8 +44,8 @@ const queryPaymentSchema = z.object({
   query: z.object({
     customerType: z.enum(CANTEEN_CONSTANTS.customerTypes).optional(),
     entry: z.string().optional(),
-    squadron: z.enum(CANTEEN_CONSTANTS.squadrons).optional(),
-    room: z.enum(CANTEEN_CONSTANTS.rooms).optional(),
+    squadron: z.string().optional(),
+    room: z.string().optional(),
     pstaff: z.string().optional(),
     year: z.string().optional(),
     month: z.string().optional(),
