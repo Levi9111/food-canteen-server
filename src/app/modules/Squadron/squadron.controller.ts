@@ -17,7 +17,8 @@ const getAllSquadrons = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getSquadronById = catchAsync(async (req: Request, res: Response) => {
-  const result = await SquadronService.getSquadronById(req.params.id as string);
+  const identifier = decodeURIComponent(req.params.id as string);
+  const result = await SquadronService.getSquadronById(identifier);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
@@ -39,10 +40,8 @@ const createSquadron = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateSquadron = catchAsync(async (req: Request, res: Response) => {
-  const result = await SquadronService.updateSquadron(
-    req.params.id as string,
-    req.body,
-  );
+  const identifier = decodeURIComponent(req.params.id as string);
+  const result = await SquadronService.updateSquadron(identifier, req.body);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
@@ -53,7 +52,8 @@ const updateSquadron = catchAsync(async (req: Request, res: Response) => {
 });
 
 const deleteSquadron = catchAsync(async (req: Request, res: Response) => {
-  const result = await SquadronService.deleteSquadron(req.params.id as string);
+  const identifier = decodeURIComponent(req.params.id as string);
+  const result = await SquadronService.deleteSquadron(identifier);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
@@ -64,10 +64,9 @@ const deleteSquadron = catchAsync(async (req: Request, res: Response) => {
 });
 
 const addRoomToSquadron = catchAsync(async (req: Request, res: Response) => {
-  const result = await SquadronService.addRoomToSquadron(
-    req.params.id as string,
-    req.body.roomName,
-  );
+  const identifier = decodeURIComponent(req.params.id as string);
+  const roomName = ((req.body.roomName || req.body.room) as string)?.trim();
+  const result = await SquadronService.addRoomToSquadron(identifier, roomName);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
@@ -79,9 +78,13 @@ const addRoomToSquadron = catchAsync(async (req: Request, res: Response) => {
 
 const removeRoomFromSquadron = catchAsync(
   async (req: Request, res: Response) => {
+    const identifier = decodeURIComponent(req.params.id as string);
+    const roomName = decodeURIComponent(
+      (req.params.roomName as string) || '',
+    ).trim();
     const result = await SquadronService.removeRoomFromSquadron(
-      req.params.id as string,
-      req.params.roomName as string,
+      identifier,
+      roomName,
     );
 
     sendResponse(res, {
