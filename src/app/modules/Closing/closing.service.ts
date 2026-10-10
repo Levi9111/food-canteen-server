@@ -9,6 +9,7 @@ import { PaymentModel } from '../Payment/payment.model';
 import { PStaffModel } from '../PStaff/pstaff.model';
 import { RoomExpenseModel } from '../RoomExpense/roomexpense.model';
 import { StaffExpenseModel } from '../StaffExpense/staffexpense.model';
+import { SquadronModel } from '../Squadron/squadron.model';
 import { MonthlyClosingModel } from './closing.model';
 
 const closeMonth = async (
@@ -29,8 +30,18 @@ const closeMonth = async (
 
     const savedRecords = [];
 
-    for (const sqn of CANTEEN_CONSTANTS.squadrons) {
-      for (const room of CANTEEN_CONSTANTS.rooms) {
+    const activeSqns = await SquadronModel.find({ isActive: true });
+    const squadronList =
+      activeSqns.length > 0
+        ? activeSqns.map((s) => ({ name: s.name, rooms: s.rooms }))
+        : CANTEEN_CONSTANTS.squadrons.map((sqn) => ({
+            name: sqn,
+            rooms: Array.from(CANTEEN_CONSTANTS.rooms),
+          }));
+
+    for (const sqnItem of squadronList) {
+      const sqn = sqnItem.name;
+      for (const room of sqnItem.rooms) {
         // Prior month closing
         const prior = await MonthlyClosingModel.findOne({
           customerType: 'RECRUIT_ROOM',

@@ -18,6 +18,7 @@ import { PaymentModel } from '../Payment/payment.model';
 import { PStaffModel } from '../PStaff/pstaff.model';
 import { RoomExpenseModel } from '../RoomExpense/roomexpense.model';
 import { StaffExpenseModel } from '../StaffExpense/staffexpense.model';
+import { SquadronModel } from '../Squadron/squadron.model';
 
 import {
   IRoomDailyReportResponse,
@@ -47,10 +48,21 @@ const getRoomsDailyReport = async (
   }
 
   let grandTotalPaisa = 0;
-  const squadronsData = CANTEEN_CONSTANTS.squadrons.map((sqn) => {
+  const activeSqns = await SquadronModel.find({ isActive: true }).sort({
+    createdAt: 1,
+  });
+  const squadronsList =
+    activeSqns.length > 0
+      ? activeSqns.map((s) => ({ name: s.name, rooms: s.rooms }))
+      : CANTEEN_CONSTANTS.squadrons.map((sqn) => ({
+          name: sqn,
+          rooms: Array.from(CANTEEN_CONSTANTS.rooms),
+        }));
+
+  const squadronsData = squadronsList.map((sqnItem) => {
     let sqnTotalPaisa = 0;
-    const rooms = CANTEEN_CONSTANTS.rooms.map((room) => {
-      const rec = expMap.get(`${sqn}|${room}`);
+    const rooms = sqnItem.rooms.map((room) => {
+      const rec = expMap.get(`${sqnItem.name}|${room}`);
       const amtPaisa = rec ? rec.amount : 0;
       sqnTotalPaisa += amtPaisa;
 
@@ -68,7 +80,7 @@ const getRoomsDailyReport = async (
     grandTotalPaisa += sqnTotalPaisa;
 
     return {
-      squadron: sqn,
+      squadron: sqnItem.name,
       totalInTaka: toTaka(sqnTotalPaisa),
       rooms,
     };
@@ -100,9 +112,22 @@ const getRoomsMonthlyMatrix = async (
     isDeleted: false,
   });
 
+  const sqnDoc = await SquadronModel.findOne({
+    name: {
+      $regex: new RegExp(
+        `^${squadron.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').trim()}$`,
+        'i',
+      ),
+    },
+  });
+  const roomList =
+    sqnDoc && sqnDoc.rooms.length > 0
+      ? sqnDoc.rooms
+      : Array.from(CANTEEN_CONSTANTS.rooms);
+
   // Map: room -> day -> amount
   const roomDaysMap = new Map<string, Map<number, number>>();
-  for (const room of CANTEEN_CONSTANTS.rooms) {
+  for (const room of roomList) {
     roomDaysMap.set(room, new Map<number, number>());
   }
 
@@ -154,7 +179,7 @@ const getRoomsMonthlyMatrix = async (
   let sqnPaid = 0;
   let sqnNetDue = 0;
 
-  const rows: IRoomMonthlyMatrixRow[] = CANTEEN_CONSTANTS.rooms.map((room) => {
+  const rows: IRoomMonthlyMatrixRow[] = roomList.map((room) => {
     const dayMap = roomDaysMap.get(room) || new Map<number, number>();
     const daysObj: Record<number, number> = {};
     let monthlyPaisa = 0;
